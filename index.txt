@@ -1,0 +1,7 @@
+npm init -y
+npm install express graphql@15.10.3 express-graphql@0.12.0
+in ubuntu
+cd /mnt/c/Users/Nithya/Desktop
+ansible-playbook -i inventory.ini deploy.yml --ask-become-pass
+in powershell
+node server.js

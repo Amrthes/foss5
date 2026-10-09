@@ -1,0 +1,42 @@
+
+---
+- name: Deploy GraphQL Task API
+  hosts: local
+  become: true
+
+  tasks:
+    - name: Install Node.js and npm
+      apt:
+        name:
+          - nodejs
+          - npm
+        state: present
+        update_cache: true
+
+    - name: Create application directory
+      file:
+        path: /opt/task-api
+        state: directory
+
+    - name: Copy server code
+      copy:
+        src: server.js
+        dest: /opt/task-api/server.js
+
+    - name: Copy package files
+      copy:
+        src: "{{ item }}"
+        dest: /opt/task-api/
+      loop:
+        - package.json
+        - package-lock.json
+
+    - name: Install dependencies
+      command: npm install
+      args:
+        chdir: /opt/task-api
+
+    - name: Start GraphQL API
+      shell: nohup node server.js > app.log 2>&1 &
+      args:
+        chdir: /opt/task-api
